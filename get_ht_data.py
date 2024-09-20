@@ -1,11 +1,22 @@
 import os
+import subprocess
 import pandas as pd
 
-# Define the base directory for the repo (adjust this to your actual repo location)
-base_dir = "path_to_your_repo"
+def get_git_root():
+    try:
+        # Run the git command to get the top-level directory
+        base_dir = subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).strip().decode('utf-8')
+        return base_dir
+    except subprocess.CalledProcessError as e:
+        print("Error getting Git repository root:", e)
+        return None
 
-# Create an empty list to hold the data
-file_data = []
+# Get the base directory of the Git repository
+base_dir = get_git_root()
+
+if base_dir:
+    # Create an empty list to hold the data
+    file_data = []
 
 # Walk through all directories and subdirectories in the base_dir
 for root, dirs, files in os.walk(base_dir):
